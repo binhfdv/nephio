@@ -1,5 +1,37 @@
 # go version 18.10
 # ubuntu 20.04 focal
 
+# use docker without sudo
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+newgrp docker
+
+
 # install kind
 go install sigs.k8s.io/kind@v0.20.0
+
+# kind cluster with connection for cluster api
+cat << EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.27.1
+    extraMounts:
+      - hostPath: /var/run/docker.sock
+        containerPath: /var/run/docker.sock
+EOF
+
+# install gitea
+kubectl create namespace gitea
+kubectl create secret generic gitea-postgresql -n gitea \
+    --from-literal=postgres-password=secret \
+    --from-literal=password=secret
+kubectl label secret -n gitea gitea-postgresql app.kubernetes.io/name=postgresql
+kubectl label secret -n gitea gitea-postgresql app.kubernetes.io/instance=gitea
+kubectl create secret generic git-user-secret -n gitea \
+    --type='kubernetes.io/basic-auth' \
+    --from-literal=username=nephio \
+    --from-literal=password=secret
+
+
