@@ -62,5 +62,9 @@ kpt fn render cluster-capi-kind-docker-templates
 kpt live init cluster-capi-kind-docker-templates
 kpt live apply cluster-capi-kind-docker-templates --reconcile-timeout 15m --output=table
 
-
+# web ui
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-packages.git/nephio-webui@v1.0.1
+kpt fn render nephio-webui
+kpt live init nephio-webui
+kpt live apply nephio-webui --reconcile-timeout=15m --output=table --inventory-policy=adopt
 
