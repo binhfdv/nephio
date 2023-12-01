@@ -1,4 +1,4 @@
-# go version 18.10
+# go version 21.4
 # ubuntu 20.04 focal
 
 # use docker without sudo
@@ -9,6 +9,9 @@ newgrp docker
 
 # install kind
 go install sigs.k8s.io/kind@v0.20.0
+
+# install kpt
+go install -v github.com/GoogleContainerTools/kpt@main
 
 # kind cluster with connection for cluster api
 cat << EOF | kind create cluster --config=-
@@ -33,5 +36,31 @@ kubectl create secret generic git-user-secret -n gitea \
     --type='kubernetes.io/basic-auth' \
     --from-literal=username=nephio \
     --from-literal=password=secret
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-example-packages/gitea@v1.0.1
+kpt fn render gitea
+kpt live init gitea
+kpt live apply gitea --reconcile-timeout 15m --output=table
+
+# cluster api
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-example-packages/cert-manager@v1.0.1
+kpt fn render cert-manager
+kpt live init cert-manager
+kpt live apply cert-manager --reconcile-timeout 15m --output=table
+
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-example-packages/cluster-capi@v1.0.1
+kpt fn render cluster-capi
+kpt live init cluster-capi
+kpt live apply cluster-capi --reconcile-timeout 15m --output=table
+
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-example-packages/cluster-capi-infrastructure-docker@v1.0.1
+kpt fn render cluster-capi-infrastructure-docker
+kpt live init cluster-capi-infrastructure-docker
+kpt live apply cluster-capi-infrastructure-docker --reconcile-timeout 15m --output=table
+
+kpt pkg get --for-deployment https://github.com/nephio-project/nephio-example-packages/cluster-capi-kind-docker-templates@v1.0.1
+kpt fn render cluster-capi-kind-docker-templates
+kpt live init cluster-capi-kind-docker-templates
+kpt live apply cluster-capi-kind-docker-templates --reconcile-timeout 15m --output=table
+
 
 
