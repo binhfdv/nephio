@@ -1,0 +1,5 @@
+# go version 18.10
+# ubuntu 20.04 focal
+
+# install kind
+go install sigs.k8s.io/kind@v0.20.0
