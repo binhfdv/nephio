@@ -8,3 +8,11 @@ sudo NEPHIO_DEBUG=false   \
      NEPHIO_BRANCH=v1.0.1 \
      NEPHIO_USER=ubuntu   \
      bash
+
+
+# open powershell 
+ssh <user>@<vm-address> -L 7007:localhost:7007 -L 3000:172.18.0.200:3000 kubectl port-forward --namespace=nephio-webui svc/nephio-webui 7007
+
+# nephio/gitea ui
+http://localhost:7007/
+http://localhost:3000/nephio
