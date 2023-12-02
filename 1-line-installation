@@ -1,5 +1,5 @@
 sudo visudo
-# add the below line the file and save
+# add the below line after the line >>> #includedir /etc/sudoers.d <<< and save
 ubuntu ALL=(ALL) NOPASSWD:ALL
 
 # install nephio
