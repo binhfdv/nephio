@@ -1,0 +1,10 @@
+sudo visudo
+# add the below line the file and save
+ubuntu ALL=(ALL) NOPASSWD:ALL
+
+# install nephio
+wget -O - https://raw.githubusercontent.com/nephio-project/test-infra/v1.0.1/e2e/provision/init.sh |  \
+sudo NEPHIO_DEBUG=false   \
+     NEPHIO_BRANCH=v1.0.1 \
+     NEPHIO_USER=ubuntu   \
+     bash
