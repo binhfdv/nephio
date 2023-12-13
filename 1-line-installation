@@ -12,9 +12,14 @@ sudo NEPHIO_DEBUG=false   \
 
 # open powershell 
 ssh <user>@<vm-address> -L 7007:localhost:7007 -L 3000:172.18.0.200:3000 kubectl port-forward --namespace=nephio-webui svc/nephio-webui 7007
+# eg
 ssh ubuntu@192.168.4.109 -L 7007:localhost:7007 -L 3000:172.18.0.200:3000 kubectl port-forward --namespace=nephio-webui svc/nephio-webui 7007
+ssh ubuntu@192.168.4.109 -L 5000:localhost:5000 kubectl --kubeconfig regional-kubeconfig port-forward --namespace=free5gc-cp svc/webui-service 5000
 
+# kill $(lsof -t -i:7007)
+# kill $(lsof -t -i:5000)
 
 # nephio/gitea ui
 http://localhost:7007/
 http://localhost:3000/nephio
+http://localhost:5000/
